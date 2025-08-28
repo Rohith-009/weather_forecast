@@ -6,7 +6,7 @@ const temp = document.querySelector('#temp');
 const wind = document.querySelector('#wind');
 
 
-const API_KEY = "aea251f5369cdb705bfbe31791d3a603";
+const API_KEY = "#enter your own api key from creating an account on openwheatherapi ";
 
 submitBtn.addEventListener('click', () => {
   const cityName = inputVal.value.trim();
@@ -35,3 +35,4 @@ submitBtn.addEventListener('click', () => {
       alert("Error fetching weather data! Please try again later.");
     });
 });
+
