@@ -1,27 +1,37 @@
-var inputval = document.querySelector('#cityinput')
-var btn = document.querySelector('#add');
-var city = document.querySelector('#cityoutput')
-var descrip = document.querySelector('#description')
-var temp = document.querySelector('#temp')
-var wind = document.querySelector('#wind')
-apik = "fcc8de7015bbb202209bbf0261babf4c"
-function convertion(val) {
-  return (val - 273).toFixed(2)
-}
-//fetch
-submitBtn.addEventListener('click', function () {
-  fetch('https://api.openweathermap.org/data/2.5/weather?q=' + inputval.value + '&appid=' + apik)
+const inputVal = document.querySelector('#cityinput');
+const submitBtn = document.querySelector('#submitBtn');
+const city = document.querySelector('#cityoutput');
+const description = document.querySelector('#description');
+const temp = document.querySelector('#temp');
+const wind = document.querySelector('#wind');
+
+
+const API_KEY = "aea251f5369cdb705bfbe31791d3a603";
+
+submitBtn.addEventListener('click', () => {
+  const cityName = inputVal.value.trim();
+  if (!cityName) {
+    alert("Please enter a city name!");
+    return;
+  }
+
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=metric`;
+
+  fetch(url)
     .then(res => res.json())
-    //.then(data => console.log(data))
     .then(data => {
-      var nameval = data['name']
-      var descrip = data['weather']['0']['description']
-      var tempature = data['main']['temp']
-      var wndspd = data['wind']['speed']
-      city.innerHTML = `City: ${nameval}`
-      temp.innerHTML = `Temperature: ${convertion(tempature)} C`
-      description.innerHTML = `Conditions: ${descrip}`
-      wind.innerHTML = `Wind Speed: ${wndspd} km/h`
+      if (data.cod !== 200) {
+        alert(`Error: ${data.message}`);
+        return;
+      }
+
+      city.textContent = `📍 ${data.name}, ${data.sys.country}`;
+      description.textContent = `🌦️ ${data.weather[0].description}`;
+      temp.textContent = `🌡️ ${data.main.temp} °C`;
+      wind.textContent = `💨 ${data.wind.speed} km/h`;
     })
-    .catch(err => alert('You entered Wrong city name'))
-})
+    .catch(err => {
+      console.error(err);
+      alert("Error fetching weather data! Please try again later.");
+    });
+});
